@@ -1,4 +1,4 @@
-# Socket.io React Social App :metal:
+# Socket.io React Chat App :metal:
 
 Статья на Хабре: <a href="https://habr.com/ru/post/544046/">Разрабатываем чат на React с использованием Socket.IO</a>
 
