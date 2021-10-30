@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 // hooks
-import { useLocalStorage } from 'hooks'
+import {getRooms, useLocalStorage} from 'hooks'
 // styles
 import { Form, Button } from 'react-bootstrap'
 
@@ -23,6 +23,12 @@ export function Home() {
     linkRef.current.click()
   }
 
+  const [rooms, setRooms] = useState([])
+
+  getRooms().then(data => {
+    setRooms(data)
+  })
+
   const trimmed = username.trim()
 
   return (
@@ -38,10 +44,11 @@ export function Home() {
       <Form.Group>
         <Form.Label>Room:</Form.Label>
         <Form.Control as='select' value={roomId} onChange={handleChangeRoom}>
-          <option value='free'>Free</option>
-          <option value='job' disabled>
-            Job
-          </option>
+          { rooms.map((room, i) => {
+            return (
+              <option key={i} value={room.name}>{room.name}</option>
+            )
+          })}
         </Form.Control>
       </Form.Group>
       {trimmed && (

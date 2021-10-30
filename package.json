@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "concurrently": "^6.0.0",
+    "express": "^4.17.1",
     "nanoid": "^3.1.20"
   },
   "scripts": {
