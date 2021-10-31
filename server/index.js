@@ -49,7 +49,11 @@ expressApp.use(cors())
 
 expressApp.get('/rooms', (req, res) => {
   const rooms = dbConnection.getRooms()
-  res.send(rooms)
+  rooms.then(rows => {
+    res.send(rows)
+  }).catch(() => {
+    res.error()
+  })
 })
 
 const PORT_API = process.env.PORT_API || 5001

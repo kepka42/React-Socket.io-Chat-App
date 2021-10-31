@@ -1,22 +1,20 @@
 const { Client } = require('pg')
 
 class DbConnection {
-  constructor() {
-    this.client = new Client();
-  }
-
   getRooms() {
-    return [
-      {
-        name: 'Room1'
-      },
-      {
-        name: 'Room2'
-      },
-      {
-        name: 'Room3'
-      }
-    ]
+    const client = new Client();
+    client.connect()
+
+    return client
+      .query('SELECT * FROM rooms')
+      .then(res => res.rows)
+      .catch((e) => {
+        console.log('error: ' + e)
+        return e
+      })
+      .finally(() => {
+        client.end()
+      })
   }
 }
 

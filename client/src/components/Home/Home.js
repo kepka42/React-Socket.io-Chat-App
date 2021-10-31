@@ -7,7 +7,7 @@ import { Form, Button } from 'react-bootstrap'
 
 export function Home() {
   const [username, setUsername] = useLocalStorage('username', 'John')
-  const [roomId, setRoomId] = useState('free')
+  const [roomId, setRoomId] = useState('')
   const linkRef = useRef(null)
 
   const handleChangeName = (e) => {
@@ -27,6 +27,7 @@ export function Home() {
 
   getRooms().then(data => {
     setRooms(data)
+    setRoomId(data[0].id)
   })
 
   const trimmed = username.trim()
@@ -46,7 +47,7 @@ export function Home() {
         <Form.Control as='select' value={roomId} onChange={handleChangeRoom}>
           { rooms.map((room, i) => {
             return (
-              <option key={i} value={room.name}>{room.name}</option>
+              <option key={i} value={room.id}>{room.name}</option>
             )
           })}
         </Form.Control>
