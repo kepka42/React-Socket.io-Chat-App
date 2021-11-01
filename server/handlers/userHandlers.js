@@ -1,24 +1,34 @@
-const users = {
-  1: { username: 'Alice', online: false },
-  2: { username: 'Bob', online: false }
-}
+let users = {}
 
 module.exports = (io, socket) => {
   const getUsers = () => {
-    io.in(socket.roomId).emit('users', users)
+    if (!(socket.roomId in users)) {
+      return
+    }
+
+    const usersInRoom = users[socket.roomId]
+    io.in(socket.roomId).emit('users', usersInRoom)
   }
 
   const addUser = ({ username, userId }) => {
-    if (!users[userId]) {
-      users[userId] = { username, online: true }
+    if (!(socket.roomId in users)) {
+      users[socket.roomId] = []
+    }
+
+    if (!users[socket.roomId][userId]) {
+      users[socket.roomId][userId] = { username, online: true }
     } else {
-      users[userId].online = true
+      users[socket.roomId][userId].online = true
     }
     getUsers()
   }
 
   const removeUser = (userId) => {
-    users[userId].online = false
+    if (!(socket.roomId in users)) {
+      return
+    }
+
+    users[socket.roomId][userId].online = false
     getUsers()
   }
 

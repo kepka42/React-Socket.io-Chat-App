@@ -99,7 +99,17 @@ npm i
 - Выполнить команду, находясь в корневой директории проекта
 
 ```bash
+PGUSER=postgress \
+PGHOST=localhost \
+PGPASSWORD=postgress1 \
+PGDATABASE=postgres \
+PGPORT=5432 \
 yarn start
 # или
+PGUSER=postgress \
+PGHOST=localhost \
+PGPASSWORD=postgress1 \
+PGDATABASE=postgres \
+PGPORT=5432 \
 npm start
 ```
