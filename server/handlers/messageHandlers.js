@@ -11,7 +11,6 @@ module.exports = (io, socket) => {
     const messages = dbConnection.getMessages(roomId)
 
     messages.then((res) => {
-      console.log(res)
       io.in(roomId).emit('messages', res)
     })
   }

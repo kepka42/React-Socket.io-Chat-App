@@ -50,8 +50,6 @@ class DbConnection {
     client.connect()
 
     const sql = `INSERT INTO messages VALUES ('${data.messageId}', '${roomId}', '${data.userId}', '${data.senderName}', '${data.messageText}', to_timestamp('${data.createdAt}'))`;
-    console.log(sql);
-
 
     return client
       .query(sql)

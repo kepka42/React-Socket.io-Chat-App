@@ -6,7 +6,7 @@ module.exports = (io, socket) => {
       return
     }
 
-    const usersInRoom = users[socket.roomId]
+    const usersInRoom = Object.values(users[socket.roomId])
     io.in(socket.roomId).emit('users', usersInRoom)
   }
 
@@ -25,6 +25,10 @@ module.exports = (io, socket) => {
 
   const removeUser = (userId) => {
     if (!(socket.roomId in users)) {
+      return
+    }
+
+    if (!users[socket.roomId][userId]) {
       return
     }
 

@@ -23,6 +23,7 @@ export const useChat = (roomId) => {
     socketRef.current.emit('user:add', { username, userId })
 
     socketRef.current.on('users', (users) => {
+      console.log(users)
       setUsers(users)
     })
 
