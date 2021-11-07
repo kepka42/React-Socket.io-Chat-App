@@ -3,7 +3,7 @@ import io from 'socket.io-client'
 import { nanoid } from 'nanoid'
 // hooks
 import { useLocalStorage, useBeforeUnload } from 'hooks'
-import { SERVER_URL } from 'config';
+import { SERVER_URL_WS } from 'config';
 
 export const useChat = (roomId) => {
   const [users, setUsers] = useState([])
@@ -15,7 +15,7 @@ export const useChat = (roomId) => {
   const socketRef = useRef(null)
 
   useEffect(() => {
-    socketRef.current = io(SERVER_URL, {
+    socketRef.current = io(SERVER_URL_WS, {
       query: { roomId }
     })
 
