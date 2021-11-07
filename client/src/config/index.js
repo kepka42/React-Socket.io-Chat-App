@@ -1,4 +1,4 @@
-export const SERVER_URL_API = 'http://webchat-server.azurewebsites.net/';
+export const SERVER_URL_API = 'http://webchat-server.azurewebsites.net';
 export const SERVER_URL_WS = 'http://webchat-server.azurewebsites.net:8081'
 
 // debug
