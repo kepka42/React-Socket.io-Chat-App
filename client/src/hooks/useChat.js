@@ -3,8 +3,7 @@ import io from 'socket.io-client'
 import { nanoid } from 'nanoid'
 // hooks
 import { useLocalStorage, useBeforeUnload } from 'hooks'
-
-const SERVER_URL = 'http://localhost:5000'
+import { SERVER_URL } from 'config';
 
 export const useChat = (roomId) => {
   const [users, setUsers] = useState([])
