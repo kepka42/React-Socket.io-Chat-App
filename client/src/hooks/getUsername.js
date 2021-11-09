@@ -1,3 +1,3 @@
 export const getUsername = () => {
-  return window.localStorage.getItem('username')
+  return window.localStorage.getItem('username') ?? ""
 }
