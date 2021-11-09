@@ -1,62 +1,78 @@
-import { useState, useRef } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-// hooks
-import {getRooms, useLocalStorage} from 'hooks'
 // styles
 import { Form, Button } from 'react-bootstrap'
+import {getRooms} from "../../hooks";
 
-export function Home() {
-  const [username, setUsername] = useLocalStorage('username', 'John')
-  const [roomId, setRoomId] = useState('')
-  const linkRef = useRef(null)
+export class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: 'John',
+      roomId: '',
+      rooms: [],
+    };
+    this.linkRef = React.createRef()
 
-  const handleChangeName = (e) => {
-    setUsername(e.target.value)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleChangeName = this.handleChangeName.bind(this)
+    this.handleChangeRoom = this.handleChangeRoom.bind(this)
   }
 
-  const handleChangeRoom = (e) => {
-    setRoomId(e.target.value)
+  componentDidMount() {
+    getRooms().then(data => {
+      this.setState({
+        rooms: data,
+        roomId: data[0].id,
+      })
+    })
   }
 
-  const handleSubmit = (e) => {
+  handleChangeName(e) {
+    this.setState({
+      username: e.target.value,
+    })
+  }
+
+  handleChangeRoom(e) {
+    this.setState({
+      roomId: e.target.value,
+    })
+  }
+
+  handleSubmit(e) {
     e.preventDefault()
-    linkRef.current.click()
+    this.linkRef.current.click()
   }
 
-  const [rooms, setRooms] = useState([])
-
-  getRooms().then(data => {
-    setRooms(data)
-    setRoomId(data[0].id)
-  })
-
-  const trimmed = username.trim()
-
-  return (
-    <Form
-      className='mt-5'
-      style={{ maxWidth: '320px', margin: '0 auto' }}
-      onSubmit={handleSubmit}
-    >
-      <Form.Group>
-        <Form.Label>Name:</Form.Label>
-        <Form.Control value={username} onChange={handleChangeName} />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Room:</Form.Label>
-        <Form.Control as='select' value={roomId} onChange={handleChangeRoom}>
-          { rooms.map((room, i) => {
-            return (
-              <option key={i} value={room.id}>{room.name}</option>
-            )
-          })}
-        </Form.Control>
-      </Form.Group>
-      {trimmed && (
-        <Button variant='success' as={Link} to={`/${roomId}`} ref={linkRef}>
-          Chat
-        </Button>
-      )}
-    </Form>
-  )
+  render() {
+    return (
+      <Form
+        className='mt-5'
+        style={{ maxWidth: '320px', margin: '0 auto' }}
+        onSubmit={this.handleSubmit}
+      >
+        <Form.Group>
+          <Form.Label>Name:</Form.Label>
+          <Form.Control value={this.state.username} onChange={this.handleChangeName} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Room:</Form.Label>
+          <Form.Control as='select' value={this.state.roomId} onChange={this.handleChangeRoom}>
+            { this.state.rooms.map((room, i) => {
+              return (
+                <option key={i} value={room.id}>{room.name}</option>
+              )
+            })}
+          </Form.Control>
+        </Form.Group>
+        {this.state.username.trim() && (
+          <Button variant='success' as={Link} to={`/${this.state.roomId}`} ref={this.linkRef}>
+            Chat
+          </Button>
+        )}
+      </Form>
+    );
+  }
 }
+
