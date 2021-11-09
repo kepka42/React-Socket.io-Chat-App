@@ -1,19 +1,17 @@
-const http = require('http')
-const ioServer = require('socket.io')
-const express = require('express')
-const DbConnection = require('./db/pg');
+const DBConnection = require('./db/pg');
 
-
-const server = http.createServer()
-const io = ioServer(server, {
-  cors: {
-    origin: '*'
-  }
-})
-const dbConnection = new DbConnection()
+var express = require('express'),
+    app = express(),
+    server = require('http').createServer(app),
+    io = require('socket.io')(server, {
+      cors: {
+        origin: '*'
+      }
+    }),
+    cors = require('cors')
 
 const log = console.log
-
+const dbConnection = new DBConnection()
 const registerMessageHandlers = require('./handlers/messageHandlers')
 const registerUserHandlers = require('./handlers/userHandlers')
 
@@ -36,18 +34,10 @@ const onConnection = (socket) => {
 
 io.on('connection', onConnection)
 
-const PORT_WS = process.env.PORT_WS || 5000
-server.listen(PORT_WS, () => {
-  console.log(`WS Server ready. Port: ${PORT_WS}`)
-})
-
 // REST API
+app.use(cors())
 
-const cors = require('cors')
-const expressApp = express()
-expressApp.use(cors())
-
-expressApp.get('/rooms', (req, res) => {
+app.get('/rooms', (req, res) => {
   const rooms = dbConnection.getRooms()
   rooms.then(rows => {
     res.send(rows)
@@ -56,7 +46,7 @@ expressApp.get('/rooms', (req, res) => {
   })
 })
 
-const PORT_API = process.env.PORT_API || 5001
-expressApp.listen(PORT_API, () => {
-  log(`API Server ready. Port ${PORT_API}`)
+const PORT = process.env.PORT || 8081
+server.listen(PORT, () => {
+  console.log(`Server ready. Port: ${PORT}`)
 })

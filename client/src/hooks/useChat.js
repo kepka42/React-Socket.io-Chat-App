@@ -2,27 +2,26 @@ import { useEffect, useRef, useState } from 'react'
 import io from 'socket.io-client'
 import { nanoid } from 'nanoid'
 // hooks
-import { useLocalStorage, useBeforeUnload } from 'hooks'
-import { SERVER_URL_WS } from 'config';
+import { useLocalStorage, useBeforeUnload, getUsername } from 'hooks'
+import { SERVER_URL } from 'config';
 
 export const useChat = (roomId) => {
   const [users, setUsers] = useState([])
   const [messages, setMessages] = useState([])
 
   const [userId] = useLocalStorage('userId', nanoid(8))
-  const [username] = useLocalStorage('username')
+  const username = getUsername()
 
   const socketRef = useRef(null)
 
   useEffect(() => {
-    socketRef.current = io(SERVER_URL_WS, {
+    socketRef.current = io(SERVER_URL, {
       query: { roomId }
     })
 
     socketRef.current.emit('user:add', { username, userId })
 
     socketRef.current.on('users', (users) => {
-      console.log(users)
       setUsers(users)
     })
 

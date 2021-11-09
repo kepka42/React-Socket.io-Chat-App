@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 // hooks
-import { useLocalStorage, useChat } from 'hooks'
+import { getUsername, useChat } from 'hooks'
 // components
 import { MessageForm } from './MessageForm'
 import { MessageList } from './MessageList'
@@ -10,7 +10,7 @@ import { Container } from 'react-bootstrap'
 
 export function ChatRoom() {
   const { roomId } = useParams()
-  const [username] = useLocalStorage('username')
+  const username = getUsername()
   const { users, messages, sendMessage } = useChat(roomId)
 
   return (

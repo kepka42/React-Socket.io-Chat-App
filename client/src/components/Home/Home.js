@@ -2,13 +2,15 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 // styles
 import { Form, Button } from 'react-bootstrap'
-import {getRooms} from "../../hooks";
+import {getRooms, setUsername, getUsername} from "../../hooks";
 
 export class Home extends React.Component {
   constructor(props) {
     super(props);
+    this.setUsername = setUsername
+
     this.state = {
-      username: 'John',
+      username: getUsername(),
       roomId: '',
       rooms: [],
     };
@@ -32,6 +34,7 @@ export class Home extends React.Component {
     this.setState({
       username: e.target.value,
     })
+    this.setUsername(e.target.value)
   }
 
   handleChangeRoom(e) {
